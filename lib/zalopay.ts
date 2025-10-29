@@ -1,5 +1,5 @@
-import crypto from "crypto";
 import axios from "axios";
+import crypto from "crypto";
 
 const config = {
   app_id: "554",
@@ -8,11 +8,22 @@ const config = {
   endpoint: "https://sb-openapi.zalopay.vn/v2/create",
 };
 
-export const createZaloPayOrder = async (amount: number, orderId: string, description: string) => {
-  const embed_data = { redirecturl: "http://localhost:3000/checkout/success" };
+export const createZaloPayOrder = async (
+  amount: number,
+  orderId: string,
+  description: string
+) => {
+  const embed_data = {
+    redirecturl: "https://bookstore-rouge-kappa.vercel.app/checkout/success",
+  };
   const items = [{}];
   const transID = Math.floor(Math.random() * 1000000);
-  const app_trans_id = `${String(new Date().getFullYear()).slice(-2)}${String(new Date().getMonth() + 1).padStart(2, '0')}${String(new Date().getDate()).padStart(2, '0')}_${transID}`;
+  const app_trans_id = `${String(new Date().getFullYear()).slice(-2)}${String(
+    new Date().getMonth() + 1
+  ).padStart(2, "0")}${String(new Date().getDate()).padStart(
+    2,
+    "0"
+  )}_${transID}`;
 
   const order: any = {
     app_id: config.app_id,
@@ -26,7 +37,10 @@ export const createZaloPayOrder = async (amount: number, orderId: string, descri
   };
 
   const data = `${config.app_id}|${order.app_trans_id}|${order.app_user}|${order.amount}|${order.app_time}|${order.embed_data}|${order.item}`;
-  order.mac = crypto.createHmac("sha256", config.key1).update(data).digest("hex");
+  order.mac = crypto
+    .createHmac("sha256", config.key1)
+    .update(data)
+    .digest("hex");
 
   const params = new URLSearchParams(order).toString();
   console.log("ZaloPay params:", params);
