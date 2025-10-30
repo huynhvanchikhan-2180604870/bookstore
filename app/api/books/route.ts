@@ -65,8 +65,6 @@ export async function POST(request: NextRequest) {
     await dbConnect();
     const body = await request.json();
     
-    console.log("Received book data:", JSON.stringify(body, null, 2));
-    
     // Validate required fields
     const { title, author, category, publisher, price, isbn, pages, coverImage, description } = body;
     const missing = [];
@@ -81,7 +79,6 @@ export async function POST(request: NextRequest) {
     if (!description) missing.push("description");
     
     if (missing.length > 0) {
-      console.error("Missing fields:", missing);
       return NextResponse.json({ error: `Missing required fields: ${missing.join(", ")}` }, { status: 400 });
     }
 

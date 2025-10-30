@@ -18,7 +18,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const author = await Author.create(body);
     return NextResponse.json({ ok: true, data: author }, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to create author" }, { status: 500 });
+  } catch (error: any) {
+    return NextResponse.json({ error: error.message || "Failed to create author" }, { status: 500 });
   }
 }

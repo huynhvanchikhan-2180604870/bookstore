@@ -18,4 +18,22 @@ export const publisherService = {
     if (!res.ok) throw new Error("Failed to create publisher");
     return res.json();
   },
+
+  async update(id: string, body: any) {
+    const res = await fetch(`/api/publishers/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error("Failed to update publisher");
+    return res.json();
+  },
+
+  async delete(id: string) {
+    const res = await fetch(`/api/publishers/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Failed to delete publisher");
+    return res.json();
+  },
 };

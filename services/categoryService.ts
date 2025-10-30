@@ -18,4 +18,22 @@ export const categoryService = {
     if (!res.ok) throw new Error("Failed to create category");
     return res.json();
   },
+
+  async update(id: string, body: any) {
+    const res = await fetch(`/api/categories/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error("Failed to update category");
+    return res.json();
+  },
+
+  async delete(id: string) {
+    const res = await fetch(`/api/categories/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Failed to delete category");
+    return res.json();
+  },
 };

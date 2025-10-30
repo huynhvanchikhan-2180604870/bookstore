@@ -18,4 +18,22 @@ export const authorService = {
     if (!res.ok) throw new Error("Failed to create author");
     return res.json();
   },
+
+  async update(id: string, body: any) {
+    const res = await fetch(`/api/authors/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    });
+    if (!res.ok) throw new Error("Failed to update author");
+    return res.json();
+  },
+
+  async delete(id: string) {
+    const res = await fetch(`/api/authors/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) throw new Error("Failed to delete author");
+    return res.json();
+  },
 };

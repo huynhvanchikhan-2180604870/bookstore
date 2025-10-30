@@ -8,6 +8,7 @@ import { bookService } from "@/services/bookService";
 import { IBook } from "@/types";
 import toast from "react-hot-toast";
 import AddBookModal from "@/components/admin/AddBookModal";
+import EditBookModal from "@/components/admin/EditBookModal";
 import BookDetailsModal from "@/components/admin/BookDetailsModal";
 
 export default function AdminBooksPage() {
@@ -16,6 +17,8 @@ export default function AdminBooksPage() {
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [editingBook, setEditingBook] = useState<IBook | null>(null);
   const [selectedBook, setSelectedBook] = useState<IBook | null>(null);
 
   useEffect(() => {
@@ -102,7 +105,7 @@ export default function AdminBooksPage() {
                 </span>
               </div>
               <div className="flex gap-2" onClick={(e) => e.stopPropagation()}>
-                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => router.push(`/admin/books/edit/${book._id}`)} className="flex-1 px-4 py-2 bg-blue-100 rounded-xl hover:bg-blue-200 transition-colors font-semibold text-blue-600">
+                <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => { setEditingBook(book); setIsEditModalOpen(true); }} className="flex-1 px-4 py-2 bg-blue-100 rounded-xl hover:bg-blue-200 transition-colors font-semibold text-blue-600">
                   <IconEdit size={18} className="inline mr-1" /> Sửa
                 </motion.button>
                 <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={() => handleDelete(book._id)} className="flex-1 px-4 py-2 bg-red-100 rounded-xl hover:bg-red-200 transition-colors font-semibold text-red-600">
@@ -115,6 +118,7 @@ export default function AdminBooksPage() {
       )}
 
       <AddBookModal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} onSuccess={fetchBooks} />
+      <EditBookModal isOpen={isEditModalOpen} onClose={() => { setIsEditModalOpen(false); setEditingBook(null); }} onSuccess={fetchBooks} book={editingBook} />
       <BookDetailsModal isOpen={!!selectedBook} onClose={() => setSelectedBook(null)} book={selectedBook} />
     </div>
   );
