@@ -492,8 +492,4 @@ CMD ["npm", "start"]
 
 MIT License - Free to use for personal and commercial projects
 
-## Contact
 
-- Email: support@bookstore.com
-- Website: https://bookstore.com
-- GitHub: https://github.com/yourusername/bookstore

@@ -64,9 +64,37 @@ export async function POST(request: NextRequest) {
   try {
     await dbConnect();
     const body = await request.json();
+    
+    console.log("Received book data:", JSON.stringify(body, null, 2));
+    
+    // Validate required fields
+    const { title, author, category, publisher, price, isbn, pages, coverImage, description } = body;
+    const missing = [];
+    if (!title) missing.push("title");
+    if (!author) missing.push("author");
+    if (!category) missing.push("category");
+    if (!publisher) missing.push("publisher");
+    if (!price) missing.push("price");
+    if (!isbn) missing.push("isbn");
+    if (!pages) missing.push("pages");
+    if (!coverImage) missing.push("coverImage");
+    if (!description) missing.push("description");
+    
+    if (missing.length > 0) {
+      console.error("Missing fields:", missing);
+      return NextResponse.json({ error: `Missing required fields: ${missing.join(", ")}` }, { status: 400 });
+    }
+
     const book = await Book.create(body);
-    return NextResponse.json(book, { status: 201 });
-  } catch (error) {
-    return NextResponse.json({ error: "Failed to create book" }, { status: 500 });
+    const populated = await Book.findById(book._id)
+      .populate("category")
+      .populate("author")
+      .populate("publisher")
+      .lean();
+    
+    return NextResponse.json({ success: true, book: populated }, { status: 201 });
+  } catch (error: any) {
+    console.error("Create book error:", error);
+    return NextResponse.json({ error: error.message || "Failed to create book" }, { status: 500 });
   }
 }
